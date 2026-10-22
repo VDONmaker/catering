@@ -677,7 +677,7 @@ function purchaseList(){
 function copyText(t,el){try{navigator.clipboard.writeText(t).then(()=>toast('Copied'),()=>{if(el){el.select();toast('Press Ctrl+C to copy the selected text')}})}catch(e){if(el){el.select();toast('Press Ctrl+C to copy the selected text')}}}
 
 /* ================= MENU & COSTING ================= */
-const MENU_CATS=['Rice','Curry','Seafood','Vegetable','Salad','Dessert','Beverage','Snacks','Packages','Other'];
+const MENU_CATS=['Bakery','Rice','Curry','Seafood','Vegetable','Salad','Dessert','Beverage','Snacks','Packages','Other'];
 PAGES.menu={html(){
   const ft=num(S.settings.foodTarget)/100;const ms=menuSales(90);
   const rows=S.menu.filter(m=>match('menu',m.name,m.category));
@@ -726,7 +726,7 @@ function editMenu(id){
 function readLines(){return $$('#lines .line').map(r=>{const o={};$$('[data-l]',r).forEach(el=>{if(el.tagName!=='SPAN')o[el.dataset.l]=el.value});return o})}
 
 /* ================= EVENTS & SALES ================= */
-const EV_TYPES=['Wedding','Corporate lunch','Conference','Birthday party','Almsgiving (dana)','Lunch packets','Private dinner','Other'];
+const EV_TYPES=['Street Market','Wedding','Corporate lunch','Conference','Birthday party','Almsgiving (dana)','Lunch packets','Private dinner','Other'];
 PAGES.sales={html(){
   const months=[...new Set(S.events.map(e=>monthKey(e.date)))].sort().reverse();
   let rows=S.events.filter(e=>(UI.salesStatus==='all'||e.status===UI.salesStatus)&&(UI.salesMonth==='all'||monthKey(e.date)===UI.salesMonth)&&match('sales',e.client,e.type,e.venue,e.phone));
