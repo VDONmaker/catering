@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function myEmail() {
+      return request.auth.token.email.lower();
+    }
+
+    // OWNERS: put your own Gmail address here (lower case), then click Publish.
+    // Owners can always sign in, and only owners can add or remove app users.
+    function isOwner() {
+      return signedIn() && myEmail() in [
+        'owner@gmail.com'
+      ];
+    }
+
+    // APP USERS: managed inside the app on the "App users" page (no need to edit this file).
+    function isUser() {
+      return isOwner()
+        || (signedIn() && exists(/databases/$(database)/documents/access/$(myEmail())));
+    }
+
+    match /access/{email} {
+      allow read: if isUser();
+      allow write: if isOwner();
+    }
+    match /{collection}/{doc} {
+      allow read, write: if collection != 'access' && isUser();
+    }
+  }
+}
